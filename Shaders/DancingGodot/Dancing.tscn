@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Shaders/DancingGodot/DancingGodot.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Shaders/DancingGodot/DancingGodot.tres" type="Material" id=3]
+
+[node name="Dancing" type="Node2D"]
+position = Vector2( 67.7102, 58.1065 )
+script = ExtResource( 1 )
+
+[node name="HSlider" type="HSlider" parent="."]
+anchor_right = 0.17
+anchor_bottom = 1.143
+margin_left = -60.9193
+margin_top = 90.58
+margin_right = 63.0807
+margin_bottom = 106.58
+min_value = 1.0
+max_value = 15.0
+value = 10.0
+ticks_on_borders = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = -52.2144
+margin_top = 71.4361
+margin_right = 41.7856
+margin_bottom = 85.4361
+text = "Dancing Godot"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon" type="Sprite" parent="."]
+material = ExtResource( 3 )
+position = Vector2( -7.85934, 14.816 )
+texture = ExtResource( 2 )
+[connection signal="value_changed" from="HSlider" to="." method="_on_HSlider_value_changed"]

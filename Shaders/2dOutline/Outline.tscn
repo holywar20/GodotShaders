@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Shaders/2dOutline/2dOutline.tres" type="Material" id=1]
+[ext_resource path="res://Axe/32763-2-battle-axe-transparent.png" type="Texture" id=2]
+
+[node name="Outline" type="Node2D"]
+position = Vector2( 67.7102, 58.1065 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = -19.3334
+margin_top = 90.3333
+margin_right = 40.6666
+margin_bottom = 109.333
+text = "Outline"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Shader" type="Sprite" parent="."]
+material = ExtResource( 1 )
+texture = ExtResource( 2 )
