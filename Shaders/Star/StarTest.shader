@@ -135,7 +135,7 @@ void fragment(){
 		newUv.x = sp.x*f;
 		newUv.y = sp.y*f;
 		
-		float offset = time * 0.1;
+		float offset = time;
 		
 		newUv += vec2( offset , 0.0 );
 		vec2 starUV	= newUv + vec2( offset, 0.0 );
