@@ -97,20 +97,21 @@ text = "Never Ending Fireball"
 
 [node name="ColorRect" type="ColorRect" parent="Star!"]
 material = SubResource( 4 )
-margin_left = -287.481
-margin_top = 7.24747
-margin_right = -138.481
-margin_bottom = 150.247
+margin_left = -741.0
+margin_top = -131.0
+margin_right = -162.0
+margin_bottom = 431.0
 rect_rotation = 0.331609
+color = Color( 0.984314, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label" type="Label" parent="Star!/ColorRect"]
-margin_left = 5.80379
-margin_top = 146.794
-margin_right = 140.804
-margin_bottom = 160.794
+margin_left = 239.599
+margin_top = 571.448
+margin_right = 374.599
+margin_bottom = 585.448
 text = "Main Sequence Star"
 __meta__ = {
 "_edit_use_anchors_": false
