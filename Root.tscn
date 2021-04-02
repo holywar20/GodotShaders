@@ -43,15 +43,23 @@ void fragment(){
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
 
-[sub_resource type="ShaderMaterial" id=5]
+[sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 7 )
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
+<<<<<<< HEAD
 shader_param/color1 = Color( 0.960784, 0.784314, 0.0509804, 1 )
 shader_param/color2 = Color( 0.94902, 0.266667, 0.164706, 1 )
+=======
+shader_param/color1 = Color( 1, 0.984314, 0, 1 )
+shader_param/color2 = Color( 0.964706, 0.964706, 0.964706, 1 )
+shader_param/coronaIntensity = 2.196
+shader_param/rotationSpeed = 1.0
+shader_param/cellSize = 1.597
+>>>>>>> 5bb41ea85409ef7581f0b7142b53c0fd4fe4e602
 
-[sub_resource type="ParticlesMaterial" id=6]
+[sub_resource type="ParticlesMaterial" id=5]
 flag_disable_z = true
 direction = Vector3( 1, 1, 0 )
 spread = 180.0
@@ -88,7 +96,7 @@ position = Vector2( 17.8383, 193.841 )
 [node name="ExpandingFire" type="Node2D" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="ExpandingFire"]
-material = SubResource( 5 )
+material = SubResource( 3 )
 margin_left = 48.8803
 margin_top = 390.575
 margin_right = 197.88
@@ -109,10 +117,10 @@ text = "Never Ending Fireball"
 
 [node name="ColorRect" type="ColorRect" parent="Star!"]
 material = SubResource( 4 )
-margin_left = -700.939
-margin_top = -9.4715
-margin_right = -121.939
-margin_bottom = 552.529
+margin_left = -559.629
+margin_top = 54.2069
+margin_right = 1440.37
+margin_bottom = 2054.21
 rect_rotation = 0.331609
 color = Color( 0, 0, 0, 0 )
 __meta__ = {
@@ -134,4 +142,4 @@ visible = false
 position = Vector2( -429.333, 283.352 )
 rotation = 0.00578766
 amount = 1000
-process_material = SubResource( 6 )
+process_material = SubResource( 5 )
