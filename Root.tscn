@@ -1,11 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Shaders/2dOutline/Outline.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Shaders/DancingGodot/Dancing.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Shaders/WaterSine/Water.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Shaders/WaterTexture/WaterTexture.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Shaders/ShaderNoise.tscn" type="PackedScene" id=5]
 
 [node name="ShaderExamples" type="Node2D"]
+
+[node name="ShaderNoise" parent="." instance=ExtResource( 5 )]
+position = Vector2( 692.042, 404.175 )
+
+[node name="WaterTexture" parent="." instance=ExtResource( 4 )]
+position = Vector2( 682.283, 16.8482 )
 
 [node name="Dancing" parent="." instance=ExtResource( 2 )]
 position = Vector2( 68.7091, 52.1133 )
@@ -15,6 +22,3 @@ position = Vector2( 214.317, 55.7495 )
 
 [node name="WaterSide" parent="." instance=ExtResource( 3 )]
 position = Vector2( 17.8383, 193.841 )
-
-[node name="WaterTexture" parent="." instance=ExtResource( 4 )]
-position = Vector2( 682.283, 16.8482 )

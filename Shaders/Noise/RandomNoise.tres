@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+// If numbers get super big, you'll get banding. Best to keep coordinates very small for use of this function.
+float rand(vec2 coord){
+	// prevents randomness decreasing from coordinates too large
+	coord = mod( coord, 10000.0 );
+		// returns \"random\" vec2 with x and y between 0 and 1
+	return fract(sin(dot(coord, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+vec2 rand_vec_2( vec2 coord ) {
+	// prevents randomness decreasing from coordinates too large
+	coord = mod(coord, 10000.0);
+	// returns \"random\" vec2 with x and y between 0 and 1
+    return fract(sin( vec2( dot(coord,vec2(127.1,311.7)), dot(coord,vec2(269.5,183.3)) ) ) * 43758.5453);
+}
+void fragment(){
+	vec2 coord = UV * 10.0;
+	
+	float value = rand_vec_2(coord).x;
+	
+	COLOR = vec4( vec3(value) , 1.0 );
+}"
+
+[resource]
+shader = SubResource( 1 )
