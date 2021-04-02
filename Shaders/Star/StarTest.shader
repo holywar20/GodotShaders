@@ -3,6 +3,10 @@ shader_type canvas_item;
 uniform vec4 color1 : hint_color = vec4( 0.8, 0.65, 0.3 , 1 );
 uniform vec4 color2 : hint_color = vec4( 0.8, 0.35, 0.1 , 1 );
 
+uniform float coronaIntensity : hint_range ( 1.0 , 3.0 ); // 1 For maximum size allowed. 3.0 for very dim corona.
+uniform float rotationSpeed : hint_range( 0.1 , 100.0 );
+uniform float cellSize : hint_range( 1.0 , 5.0 );
+
 // If numbers get super big, you'll get banding. Best to keep coordinates very small for use of this function.
 float rand(vec2 coord){
 	// prevents randomness decreasing from coordinates too large
@@ -42,6 +46,20 @@ float snoise(vec3 uv, float res)
 	return mix(r0, r1, f.z)*2.-1.;
 }
 
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+		
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
 float vornoi_noise( vec2 coord ){
 	vec2 i = floor( coord );
 	vec2 f = fract( coord );
@@ -63,20 +81,25 @@ float vornoi_noise( vec2 coord ){
 	return minDist;
 }
 
-float fbm( vec2 coord ){
+float fbm( vec2 coord , float t ){
 	int OCTAVES = 6;
 	
 	float normalize_factor = 0.0;
 	float value = 0.0;
-	float scale = 0.6;
+	float scale = 0.8;
 	
 	for(int i = 0; i < OCTAVES; i++){
 		
 		normalize_factor += scale;
-		value += vornoi_noise( coord ) * scale;
+		
+		if( OCTAVES % 2 == 0){
+			value += vornoi_noise( coord ) * scale * 0.7 + noise( coord ) * 0.05;
+		} else {
+			value += noise( coord ) * scale * 0.5
+		}
 
-		coord *= 2.0;
-		scale *= 0.6;
+		coord *= 1.5;
+		scale *= 0.8;
 	}
 	
 	return value / normalize_factor;
@@ -84,7 +107,7 @@ float fbm( vec2 coord ){
 
 void fragment(){
 	
-	float myWorley = fbm( UV );
+	float myWorley = fbm( UV , TIME * 0.1 );
 	
 	float freqs1 = 0.01;
 	float freqs2 = 0.07;
@@ -96,7 +119,7 @@ void fragment(){
 
 	float time		= TIME * 0.1;
 	vec2 p = -0.5 + uv;
-	float fade		= pow( length( 2.0 * p ), 0.5 );
+	float fade		= pow( length( coronaIntensity * p ), 0.5 );
 	float fVal1		= 1.0 - fade;
 	float fVal2		= 1.0 - fade;
 	
@@ -104,8 +127,8 @@ void fragment(){
 	float dist		= length(p);
 	vec3 coord		= vec3( angle, dist, time * 0.1 );
 	
-	float newTime1	= abs( snoise( coord + vec3( 0.0, -time * ( 0.35 + brightness * 0.001 ), time * 0.115 ), 15.0 ) );
-	float newTime2	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * -0.115 ), 45.0 ) );	
+	float newTime1	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * freqs1 ), 15.0 ) );
+	float newTime2	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * -freqs2 ), 45.0 ) );	
 	for( int i=1; i<=4; i++ ){
 		float power = pow( 3.0, float(i + 1) );
 		fVal1 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.01 ), ( power * ( 10.0 ) * ( newTime1 + 1.0 ) ) );
@@ -113,7 +136,7 @@ void fragment(){
 	}
 	
 	float corona		= pow( fVal1 * max( 1.1 - fade, 0.0 ), 2.0 ) * 50.0;
-	corona				+= pow( fVal2 * max( 1.1 - fade, 0.0 ), 2.0 ) * 50.0;
+	corona				+= pow( fVal2 * max( 1.1 - fade, 0.0 ), 2.0 ) * 25.0;
 	corona				*= 1.2 - newTime1;
 	
 	vec3 sphereNormal 	= vec3( 0.0, 0.0, 1.0 );
@@ -135,11 +158,12 @@ void fragment(){
 		newUv.x = sp.x*f;
 		newUv.y = sp.y*f;
 		
-		float offset = time * 0.1;
+		float offset = time * rotationSpeed;
 		
+		// TODO modify this to add rotation direction control
 		newUv += vec2( offset , 0.0 );
-		vec2 starUV	= newUv + vec2( offset, 0.0 );
-		starSphere	= color2.rgb * fbm( starUV ) * 6.0;
+		vec2 starUV	= newUv + vec2( offset , 0.0 );
+		starSphere	= color2.rgb - fbm( starUV * cellSize , time );
 	}
 	
 	float starGlow	= max( 1.0 + dist * ( 1.0 - brightness ), 0.0 );
