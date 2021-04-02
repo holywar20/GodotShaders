@@ -1,5 +1,8 @@
 shader_type canvas_item;
 
+uniform vec4 color1 : hint_color = vec4( 0.8, 0.65, 0.3 , 1 );
+uniform vec4 color2 : hint_color = vec4( 0.8, 0.35, 0.1 , 1 );
+
 // If numbers get super big, you'll get banding. Best to keep coordinates very small for use of this function.
 float rand(vec2 coord){
 	// prevents randomness decreasing from coordinates too large
@@ -60,21 +63,37 @@ float vornoi_noise( vec2 coord ){
 	return minDist;
 }
 
+float fbm( vec2 coord ){
+	int OCTAVES = 6;
+	
+	float normalize_factor = 0.0;
+	float value = 0.0;
+	float scale = 0.6;
+	
+	for(int i = 0; i < OCTAVES; i++){
+		
+		normalize_factor += scale;
+		value += vornoi_noise( coord ) * scale;
+
+		coord *= 2.0;
+		scale *= 0.6;
+	}
+	
+	return value / normalize_factor;
+}
+
 void fragment(){
 	
-	float myWorley = vornoi_noise( UV );
+	float myWorley = fbm( UV );
 	
-	float freqs1 = vornoi_noise(vec2(UV * 0.01));
-	float freqs2 = vornoi_noise(vec2(UV * 0.07));
+	float freqs1 = 0.01;
+	float freqs2 = 0.07;
 	vec2 uv = UV * 1.0;
-	
 	
 	float brightness	= freqs1 * 0.25 + freqs2 * 0.25;
 	float radius		= 0.24 + brightness * 1.0;
 	float invRadius 	= 1.0/radius;
 
-	vec3 orange			= vec3( 0.8, 0.65, 0.3 );
-	vec3 orangeRed		= vec3( 0.8, 0.35, 0.1 );
 	float time		= TIME * 0.1;
 	vec2 p = -0.5 + uv;
 	float fade		= pow( length( 2.0 * p ), 0.5 );
@@ -85,12 +104,12 @@ void fragment(){
 	float dist		= length(p);
 	vec3 coord		= vec3( angle, dist, time * 0.1 );
 	
-	float newTime1	= abs( snoise( coord + vec3( 0.0, -time * ( 0.35 + brightness * 0.001 ), time * 0.015 ), 15.0 ) );
-	float newTime2	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * -0.015 ), 45.0 ) );	
+	float newTime1	= abs( snoise( coord + vec3( 0.0, -time * ( 0.35 + brightness * 0.001 ), time * 0.115 ), 15.0 ) );
+	float newTime2	= abs( snoise( coord + vec3( 0.0, -time * ( 0.15 + brightness * 0.001 ), time * -0.115 ), 45.0 ) );	
 	for( int i=1; i<=4; i++ ){
-		float power = pow( 2.0, float(i + 1) );
-		fVal1 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.2 ), ( power * ( 10.0 ) * ( newTime1 + 1.0 ) ) );
-		fVal2 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.2 ), ( power * ( 25.0 ) * ( newTime2 + 1.0 ) ) );
+		float power = pow( 3.0, float(i + 1) );
+		fVal1 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.01 ), ( power * ( 10.0 ) * ( newTime1 + 1.0 ) ) );
+		fVal2 += ( 0.5 / power ) * snoise( coord + vec3( 0.0, -time, time * 0.01 ), ( power * ( 25.0 ) * ( newTime2 + 1.0 ) ) );
 	}
 	
 	float corona		= pow( fVal1 * max( 1.1 - fade, 0.0 ), 2.0 ) * 50.0;
@@ -110,20 +129,22 @@ void fragment(){
 	
 	if( dist < radius ){
 		// Controls how far the corona effect extends. Tweaked to allow Corona onto star surface and give it some depth.
-		corona *= pow( dist * invRadius, 20 );
+		corona *= pow( dist * invRadius, 10.0 );
 		
 		vec2 newUv;
 		newUv.x = sp.x*f;
 		newUv.y = sp.y*f;
-		newUv += vec2( time, 0.0 );
-	
-		vec3 texSample = orange.rgb * myWorley;
-		float uOff	= ( myWorley * brightness * 4.5 + time );
-		vec2 starUV	= newUv + vec2( uOff, 0.0 );
-		starSphere	= orangeRed.rgb * vornoi_noise( starUV ) * 1.0;
+		
+		float offset = time * 0.1;
+		
+		newUv += vec2( offset , 0.0 );
+		vec2 starUV	= newUv + vec2( offset, 0.0 );
+		starSphere	= color2.rgb * fbm( starUV ) * 6.0;
 	}
-	float starGlow	= min( max( 1.0 - dist * ( 1.0 - brightness ), 0.0 ), 1.0 );
-	vec3 color = vec3( f * ( 0.75 + brightness * 0.3 ) * orange ) + starSphere +  corona * orange * orangeRed * starGlow;
+	
+	float starGlow	= max( 1.0 + dist * ( 1.0 - brightness ), 0.0 );
+	vec3 color = vec3( f * ( 0.75 + brightness * 0.7 ) * color1.rgb ) + starSphere + corona * color1.rgb * color2.rgb * starGlow;
+	
 	COLOR = vec4( color , 1 );
 	// COLOR = vec4( myWorley * 0.1 , 1 , 1, 1 );
 }

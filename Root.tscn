@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Shaders/2dOutline/Outline.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Shaders/DancingGodot/Dancing.tscn" type="PackedScene" id=2]
@@ -48,6 +48,18 @@ shader = ExtResource( 7 )
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
+shader_param/color1 = Color( 0.901961, 0.054902, 0.054902, 1 )
+shader_param/color2 = Color( 1, 0.0823529, 0, 1 )
+
+[sub_resource type="ParticlesMaterial" id=6]
+flag_disable_z = true
+direction = Vector3( 1, 1, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 200.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 0.298039, 0.705882, 0.858824, 1 )
 
 [node name="ShaderExamples" type="Node2D"]
 
@@ -97,12 +109,12 @@ text = "Never Ending Fireball"
 
 [node name="ColorRect" type="ColorRect" parent="Star!"]
 material = SubResource( 4 )
-margin_left = -741.0
-margin_top = -131.0
-margin_right = -162.0
-margin_bottom = 431.0
+margin_left = -700.939
+margin_top = -9.4715
+margin_right = -121.939
+margin_bottom = 552.529
 rect_rotation = 0.331609
-color = Color( 0.984314, 0, 0, 1 )
+color = Color( 0, 0, 0, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -116,3 +128,10 @@ text = "Main Sequence Star"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Particles2D" type="Particles2D" parent="Star!"]
+visible = false
+position = Vector2( -429.333, 283.352 )
+rotation = 0.00578766
+amount = 1000
+process_material = SubResource( 6 )
