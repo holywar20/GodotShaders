@@ -1,15 +1,65 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Shaders/2dOutline/Outline.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Shaders/DancingGodot/Dancing.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Shaders/WaterSine/Water.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Shaders/WaterTexture/WaterTexture.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Shaders/ShaderNoise.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Shaders/Star/StarTest.shader" type="Shader" id=6]
+[ext_resource path="res://Shaders/ExpandingFire/ExpandingFire.shader" type="Shader" id=7]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+
+uniform sampler2D surface;
+
+float snoise(vec3 uv, float res)	// by trisomie21
+{
+	const vec3 s = vec3(1e0, 1e2, 1e4);
+	
+	uv *= res;
+	
+	vec3 uv0 = floor(mod(uv, res))*s;
+	vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
+	
+	vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
+	
+	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
+		      	  uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
+	
+	vec4 r = fract(sin(v*1e-3)*1e5);
+	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+	
+	r = fract(sin((v + uv1.z - uv0.z)*1e-3)*1e5);
+	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+	
+	return mix(r0, r1, f.z)*2.-1.;
+}
+
+void fragment(){
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 7 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 6 )
 
 [node name="ShaderExamples" type="Node2D"]
 
+[node name="Spatial" type="Spatial" parent="."]
+
+[node name="CSGSphere" type="CSGSphere" parent="Spatial"]
+radial_segments = 24
+rings = 24
+material = SubResource( 2 )
+
 [node name="ShaderNoise" parent="." instance=ExtResource( 5 )]
-position = Vector2( 692.042, 404.175 )
+position = Vector2( 928.161, 241.701 )
 
 [node name="WaterTexture" parent="." instance=ExtResource( 4 )]
 position = Vector2( 682.283, 16.8482 )
@@ -22,3 +72,46 @@ position = Vector2( 214.317, 55.7495 )
 
 [node name="WaterSide" parent="." instance=ExtResource( 3 )]
 position = Vector2( 17.8383, 193.841 )
+
+[node name="ExpandingFire" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="ExpandingFire"]
+material = SubResource( 5 )
+margin_left = 48.8803
+margin_top = 390.575
+margin_right = 197.88
+margin_bottom = 533.575
+rect_rotation = 0.331609
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ExpandingFire/ColorRect"]
+margin_left = 5.80379
+margin_top = 146.794
+margin_right = 140.804
+margin_bottom = 160.794
+text = "Never Ending Fireball"
+
+[node name="Star!" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Star!"]
+material = SubResource( 4 )
+margin_left = -287.481
+margin_top = 7.24747
+margin_right = -138.481
+margin_bottom = 150.247
+rect_rotation = 0.331609
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Star!/ColorRect"]
+margin_left = 5.80379
+margin_top = 146.794
+margin_right = 140.804
+margin_bottom = 160.794
+text = "Main Sequence Star"
+__meta__ = {
+"_edit_use_anchors_": false
+}
