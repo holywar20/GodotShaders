@@ -95,7 +95,7 @@ float fbm( vec2 coord , float t ){
 		if( OCTAVES % 2 == 0){
 			value += vornoi_noise( coord ) * scale * 0.7 + noise( coord ) * 0.05;
 		} else {
-			value += noise( coord ) * scale * 0.5
+			value += noise( coord ) * scale * 0.5;
 		}
 
 		coord *= 1.5;
@@ -106,8 +106,6 @@ float fbm( vec2 coord , float t ){
 }
 
 void fragment(){
-	
-	float myWorley = fbm( UV , TIME * 0.1 );
 	
 	float freqs1 = 0.01;
 	float freqs2 = 0.07;
@@ -139,7 +137,6 @@ void fragment(){
 	corona				+= pow( fVal2 * max( 1.1 - fade, 0.0 ), 2.0 ) * 25.0;
 	corona				*= 1.2 - newTime1;
 	
-	vec3 sphereNormal 	= vec3( 0.0, 0.0, 1.0 );
 	vec3 dir 			= vec3( 0.0 );
 	vec3 center			= vec3( 0.5, 0.5, 1.0 );
 	vec3 starSphere		= vec3( 0.0 );
@@ -150,6 +147,9 @@ void fragment(){
   	float r = dot(sp,sp);
 	float f = (1.0-sqrt(abs(1.0-r)))/(r) + brightness * 0.5;
 	
+	float a = max( corona , 0.0 );
+
+
 	if( dist < radius ){
 		// Controls how far the corona effect extends. Tweaked to allow Corona onto star surface and give it some depth.
 		corona *= pow( dist * invRadius, 10.0 );
@@ -164,11 +164,11 @@ void fragment(){
 		newUv += vec2( offset , 0.0 );
 		vec2 starUV	= newUv + vec2( offset , 0.0 );
 		starSphere	= color2.rgb - fbm( starUV * cellSize , time );
+		a = 1.0 // Always show the star itself.
 	}
 	
 	float starGlow	= max( 1.0 + dist * ( 1.0 - brightness ), 0.0 );
 	vec3 color = vec3( f * ( 0.75 + brightness * 0.7 ) * color1.rgb ) + starSphere + corona * color1.rgb * color2.rgb * starGlow;
 	
-	COLOR = vec4( color , 1 );
-	// COLOR = vec4( myWorley * 0.1 , 1 , 1, 1 );
+	COLOR = vec4( color , a );
 }
