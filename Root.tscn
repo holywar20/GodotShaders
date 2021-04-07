@@ -48,11 +48,11 @@ shader = ExtResource( 7 )
 
 [sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 6 )
-shader_param/color1 = Color( 1, 0.984314, 0, 1 )
-shader_param/color2 = Color( 0.964706, 0.964706, 0.964706, 1 )
-shader_param/coronaIntensity = 2.196
-shader_param/rotationSpeed = 1.0
-shader_param/cellSize = 1.597
+shader_param/color1 = Color( 0.0509804, 0.764706, 1, 1 )
+shader_param/color2 = Color( 0.0117647, 0.647059, 0.596078, 1 )
+shader_param/coronaIntensity = 1.85
+shader_param/rotationSpeed = 1.48
+shader_param/cellSize = 2.078
 
 [sub_resource type="ParticlesMaterial" id=5]
 flag_disable_z = true
