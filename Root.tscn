@@ -7,41 +7,8 @@
 [ext_resource path="res://Shaders/ShaderNoise.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Shaders/Star/StarTest.shader" type="Shader" id=6]
 [ext_resource path="res://Shaders/ExpandingFire/ExpandingFire.shader" type="Shader" id=7]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type spatial;
-
-uniform sampler2D surface;
-
-float snoise(vec3 uv, float res)	// by trisomie21
-{
-	const vec3 s = vec3(1e0, 1e2, 1e4);
-	
-	uv *= res;
-	
-	vec3 uv0 = floor(mod(uv, res))*s;
-	vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
-	
-	vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
-	
-	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
-		      	  uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
-	
-	vec4 r = fract(sin(v*1e-3)*1e5);
-	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	r = fract(sin((v + uv1.z - uv0.z)*1e-3)*1e5);
-	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	return mix(r0, r1, f.z)*2.-1.;
-}
-
-void fragment(){
-	
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[ext_resource path="res://Shaders/FogShader/Fog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Shaders/GodRays/GodRays.tscn" type="PackedScene" id=9]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 7 )
@@ -66,15 +33,13 @@ color = Color( 0.298039, 0.705882, 0.858824, 1 )
 
 [node name="ShaderExamples" type="Node2D"]
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="Sprite" parent="." instance=ExtResource( 9 )]
 
-[node name="CSGSphere" type="CSGSphere" parent="Spatial"]
-radial_segments = 24
-rings = 24
-material = SubResource( 2 )
+[node name="Fog" parent="." instance=ExtResource( 8 )]
+position = Vector2( -569.395, 2.71809 )
 
 [node name="ShaderNoise" parent="." instance=ExtResource( 5 )]
-position = Vector2( 928.161, 241.701 )
+position = Vector2( 964.985, 238.731 )
 
 [node name="WaterTexture" parent="." instance=ExtResource( 4 )]
 position = Vector2( 682.283, 16.8482 )
