@@ -7,114 +7,34 @@
 [ext_resource path="res://Shaders/ShaderNoise.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Shaders/Star/StarScene.tscn" type="PackedScene" id=6]
 [ext_resource path="res://PlanetShaders/PlanetShader.tscn" type="PackedScene" id=7]
-
-[sub_resource type="Shader" id=1]
-code = "shader_type spatial;
-
-uniform sampler2D surface;
-
-float snoise(vec3 uv, float res)	// by trisomie21
-{
-	const vec3 s = vec3(1e0, 1e2, 1e4);
-	
-	uv *= res;
-	
-	vec3 uv0 = floor(mod(uv, res))*s;
-	vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
-	
-	vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
-	
-	vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
-		      	  uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
-	
-	vec4 r = fract(sin(v*1e-3)*1e5);
-	float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	r = fract(sin((v + uv1.z - uv0.z)*1e-3)*1e5);
-	float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
-	
-	return mix(r0, r1, f.z)*2.-1.;
-}
-
-void fragment(){
-	
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-[ext_resource path="res://Shaders/Star/StarTest.shader" type="Shader" id=6]
-[ext_resource path="res://Shaders/ExpandingFire/ExpandingFire.shader" type="Shader" id=7]
 [ext_resource path="res://Shaders/FogShader/Fog.tscn" type="PackedScene" id=8]
 [ext_resource path="res://Shaders/GodRays/GodRays.tscn" type="PackedScene" id=9]
 
-[node name="ShaderExamples" type="Node2D"]
-
-[node name="Sprite" parent="." instance=ExtResource( 9 )]
-
-[node name="Fog" parent="." instance=ExtResource( 8 )]
-position = Vector2( -569.395, 2.71809 )
-
-[node name="ShaderNoise" parent="." instance=ExtResource( 5 )]
-position = Vector2( 964.985, 238.731 )
-
-[node name="WaterTexture" parent="." instance=ExtResource( 4 )]
-position = Vector2( 682.283, 16.8482 )
-
-[node name="Dancing" parent="." instance=ExtResource( 2 )]
-position = Vector2( 73.4136, 48.2771 )
-
-[node name="Outline" parent="." instance=ExtResource( 1 )]
-position = Vector2( 214.317, 55.7495 )
-
-[node name="WaterSide" parent="." instance=ExtResource( 3 )]
-position = Vector2( 17.8383, 193.841 )
-
-[node name="ExpandingFire" type="Node2D" parent="."]
-
-[node name="Star!" parent="." instance=ExtResource( 6 )]
-
-[node name="ColorRect" type="ColorRect" parent="ExpandingFire"]
-material = SubResource( 3 )
-margin_left = 48.8803
-margin_top = 390.575
-margin_right = 197.88
-margin_bottom = 533.575
-rect_rotation = 0.331609
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="ExpandingFire/ColorRect"]
-margin_left = 5.80379
-margin_top = 146.794
-margin_right = 140.804
-margin_bottom = 160.794
-text = "Never Ending Fireball"
-
-[node name="Star!" type="Node2D" parent="."]
-
-[node name="ColorRect" type="ColorRect" parent="Star!"]
-material = SubResource( 4 )
-margin_left = -264.583
-margin_top = 5.04063
-margin_right = -27.583
-margin_bottom = 231.041
-rect_rotation = 0.331609
-color = Color( 0, 0, 0, 0 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="Star!/ColorRect"]
-margin_left = 54.2398
-margin_top = 183.638
-margin_right = 189.24
-margin_bottom = 197.638
-text = "Main Sequence Star"
-__meta__ = {
-"_edit_use_anchors_": false
-}
->>>>>>> 53d584b74917943da96dea09042d6d1177b35e29
+[node name="Node2D" type="Node2D"]
 
 [node name="Node2D" parent="." instance=ExtResource( 7 )]
-position = Vector2( -181.224, 213.945 )
+position = Vector2( -244.077, 70.4365 )
+
+[node name="Outline" parent="." instance=ExtResource( 1 )]
+position = Vector2( -2.17468, 120.932 )
+
+[node name="Dancing" parent="." instance=ExtResource( 2 )]
+position = Vector2( 142.296, 75.5753 )
+
+[node name="Node2D" parent="Dancing" instance=ExtResource( 8 )]
+position = Vector2( -805.184, -17.7889 )
+
+[node name="Sprite" parent="Dancing/Node2D" instance=ExtResource( 9 )]
+position = Vector2( 26.8782, 301.541 )
+
+[node name="Star!" parent="Dancing/Node2D/Sprite" instance=ExtResource( 6 )]
+position = Vector2( 671.118, 15.959 )
+
+[node name="Water" parent="Dancing/Node2D/Sprite" instance=ExtResource( 3 )]
+position = Vector2( 924.782, -309.941 )
+
+[node name="WaterTexture" parent="Dancing/Node2D/Sprite" instance=ExtResource( 4 )]
+position = Vector2( 1001.76, -117.97 )
+
+[node name="ShaderNoise" parent="Dancing/Node2D/Sprite" instance=ExtResource( 5 )]
+position = Vector2( 1692.74, -81.4256 )
