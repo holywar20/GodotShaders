@@ -1,0 +1,92 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://PlanetShaders/PlanetShader.shader" type="Shader" id=1]
+[ext_resource path="res://PlanetShaders/CloudCover.shader" type="Shader" id=2]
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0, 0.126632, 0.168407, 0.400783, 0.586162, 0.810705, 0.903394, 1 )
+colors = PoolColorArray( 1, 0, 0, 1, 1, 0.597656, 0, 1, 0.412002, 1, 0.258486, 1, 1, 0.735288, 0.439948, 1, 0.387197, 0.923828, 0.0705517, 1, 0.960689, 1, 0.810121, 1, 0.884766, 0.251151, 0.251151, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/axisTilt = 0.584
+shader_param/lightOrigin = Vector2( 0, 1 )
+shader_param/timeSpeed = 0.2
+shader_param/starLight = null
+shader_param/starIntensity = 1.0
+shader_param/hasCraters = true
+shader_param/craterDepth = 0.408
+shader_param/craterDensity = 10
+shader_param/mountainDensity = 0.25
+shader_param/hasHydrosphere = true
+shader_param/riverCol = Color( 0, 0.192157, 1, 1 )
+shader_param/riverHeight = 1.019
+shader_param/riverCutoff = 0.58
+shader_param/riverAbsorption = 1.0
+shader_param/riverRoughness = 0.0
+shader_param/riverRoughnessColor = Color( 1, 1, 1, 1 )
+shader_param/iceCapCol = null
+shader_param/iceCapThreshold = 0.0
+shader_param/iceCapAbsorption = 0.0
+shader_param/iceCapRoughness = 0.0
+shader_param/isMap = false
+shader_param/size = 8.0
+shader_param/seed = 3.0
+shader_param/gradient = SubResource( 6 )
+
+[sub_resource type="Gradient" id=7]
+offsets = PoolRealArray( 0, 0.221932, 0.396867, 0.528721, 0.642298, 0.798956, 1 )
+colors = PoolColorArray( 0, 0, 0, 1, 0.48564, 0.48564, 0.48564, 1, 0.293734, 0.293734, 0.293734, 1, 0.783656, 0.783656, 0.783656, 1, 0.64924, 0.64924, 0.64924, 1, 0.302811, 0.302811, 0.302811, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=8]
+gradient = SubResource( 7 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 2 )
+shader_param/size = 8.0
+shader_param/seed = 5.0
+shader_param/axisTilt = 0.584
+shader_param/lightOrigin = Vector2( 0, 1 )
+shader_param/timeSpeed = 0.2
+shader_param/starLight = Color( 1, 1, 1, 1 )
+shader_param/starIntensity = null
+shader_param/fresnalColor = Color( 0, 0.11, 1, 1 )
+shader_param/fresnalRim = null
+shader_param/cloudCover = 0.856
+shader_param/stretch = 2.0
+shader_param/cloudReflectence = null
+shader_param/turbulence = 3
+shader_param/mainCloudSpeed = 2.0
+shader_param/gradient = SubResource( 8 )
+
+[node name="Node2D" type="Node2D"]
+position = Vector2( -46.077, 7.93661 )
+
+[node name="LandMasses" type="ColorRect" parent="."]
+material = SubResource( 2 )
+margin_right = 150.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CloudCover" type="ColorRect" parent="."]
+material = SubResource( 4 )
+margin_right = 150.0
+margin_bottom = 150.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Titan\'s Reach Planet Shaders" type="Label" parent="."]
+margin_left = -14.3028
+margin_top = 158.213
+margin_right = 166.697
+margin_bottom = 172.213
+text = "Titan's Reach Planet Shaders"
+__meta__ = {
+"_edit_use_anchors_": false
+}

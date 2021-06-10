@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Shaders/Star/StarTest.shader" type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 1 )
+shader_param/color1 = Color( 0.933333, 1, 0, 1 )
+shader_param/color2 = Color( 0.968627, 0.462745, 0, 1 )
+shader_param/coronaIntensity = 1.879
+shader_param/rotationSpeed = 0.1
+shader_param/cellSize = 3.232
+
+[sub_resource type="ParticlesMaterial" id=4]
+flag_disable_z = true
+direction = Vector3( 1, 1, 0 )
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 200.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color = Color( 0.298039, 0.705882, 0.858824, 1 )
+
+[node name="Star!" type="Node2D"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource( 3 )
+margin_left = -323.787
+margin_top = -106.512
+margin_right = -4.78735
+margin_bottom = 219.488
+rect_rotation = 0.331609
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ColorRect"]
+margin_left = 95.5248
+margin_top = 271.729
+margin_right = 230.524
+margin_bottom = 285.729
+text = "Main Sequence Star"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Particles2D" type="Particles2D" parent="."]
+visible = false
+position = Vector2( -429.333, 283.352 )
+rotation = 0.00578766
+amount = 1000
+process_material = SubResource( 4 )

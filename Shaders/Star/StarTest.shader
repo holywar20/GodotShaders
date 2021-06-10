@@ -149,7 +149,6 @@ void fragment(){
 	
 	float a = max( corona , 0.0 );
 
-
 	if( dist < radius ){
 		// Controls how far the corona effect extends. Tweaked to allow Corona onto star surface and give it some depth.
 		corona *= pow( dist * invRadius, 10.0 );
