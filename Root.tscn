@@ -42,18 +42,20 @@ void fragment(){
 
 [sub_resource type="ShaderMaterial" id=2]
 shader = SubResource( 1 )
+[ext_resource path="res://Shaders/Star/StarTest.shader" type="Shader" id=6]
+[ext_resource path="res://Shaders/ExpandingFire/ExpandingFire.shader" type="Shader" id=7]
+[ext_resource path="res://Shaders/FogShader/Fog.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Shaders/GodRays/GodRays.tscn" type="PackedScene" id=9]
 
 [node name="ShaderExamples" type="Node2D"]
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="Sprite" parent="." instance=ExtResource( 9 )]
 
-[node name="CSGSphere" type="CSGSphere" parent="Spatial"]
-radial_segments = 24
-rings = 24
-material = SubResource( 2 )
+[node name="Fog" parent="." instance=ExtResource( 8 )]
+position = Vector2( -569.395, 2.71809 )
 
 [node name="ShaderNoise" parent="." instance=ExtResource( 5 )]
-position = Vector2( 928.161, 241.701 )
+position = Vector2( 964.985, 238.731 )
 
 [node name="WaterTexture" parent="." instance=ExtResource( 4 )]
 position = Vector2( 682.283, 16.8482 )
@@ -70,6 +72,49 @@ position = Vector2( 17.8383, 193.841 )
 [node name="ExpandingFire" type="Node2D" parent="."]
 
 [node name="Star!" parent="." instance=ExtResource( 6 )]
+
+[node name="ColorRect" type="ColorRect" parent="ExpandingFire"]
+material = SubResource( 3 )
+margin_left = 48.8803
+margin_top = 390.575
+margin_right = 197.88
+margin_bottom = 533.575
+rect_rotation = 0.331609
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="ExpandingFire/ColorRect"]
+margin_left = 5.80379
+margin_top = 146.794
+margin_right = 140.804
+margin_bottom = 160.794
+text = "Never Ending Fireball"
+
+[node name="Star!" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="Star!"]
+material = SubResource( 4 )
+margin_left = -264.583
+margin_top = 5.04063
+margin_right = -27.583
+margin_bottom = 231.041
+rect_rotation = 0.331609
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Star!/ColorRect"]
+margin_left = 54.2398
+margin_top = 183.638
+margin_right = 189.24
+margin_bottom = 197.638
+text = "Main Sequence Star"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+>>>>>>> 53d584b74917943da96dea09042d6d1177b35e29
 
 [node name="Node2D" parent="." instance=ExtResource( 7 )]
 position = Vector2( -181.224, 213.945 )
