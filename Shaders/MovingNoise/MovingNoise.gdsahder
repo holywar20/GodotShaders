@@ -1,0 +1,61 @@
+shader_type canvas_item;
+
+vec2 rand22( vec2 p ){
+	vec3 a = fract( p.xyx*vec3(123.34, 234.34 , 345.65 ) );
+	a += dot( a , a *34.45);
+	return fract( vec2( a.x * a.y , a.y * a.z ) );
+}
+
+vec2 grid( vec2 uv ){
+	vec2 grid = uv * 5.0;
+	vec2 gridUv = fract(grid) - 0.5;
+	
+	return gridUv;
+}
+
+float movingVornoi( vec2 uv ){
+	
+	float m = 0.0;
+	float minDist = 100.0;
+	float t = TIME * 1.0;
+	vec2 pos = vec2(0);
+	
+	vec2 grid = uv * 5.0;
+	vec2 gridUv = fract(grid) - 0.5;
+	vec2 id = floor(grid);
+	
+	for( float y = -1.0; y<=1.0; y++ ){
+		for( float x = -1.0; x <= 1.0; x++){
+			vec2 offset = vec2( x , y );
+			vec2 r = rand22( id + offset );
+			
+			pos = offset + sin( r * t) * 0.5;
+			// Euclidian ( As the bird flies ) Distance
+			float ed = distance( gridUv , pos );
+			
+			// Manhatten Distance - Creates a weird crystalized effect
+			pos -= gridUv;
+			float md = abs( pos.x ) + abs( pos.y );
+			
+			float d = mix( ed , md , 0.0);
+			
+			if( d < minDist ){
+				minDist = d;
+			}
+		}
+	} 
+	
+	return minDist;
+}
+
+void fragment(){
+	// Convert UV into number from -1 to 1
+	vec2 uv = UV * 2.0 - 1.0;
+	
+	float vornoi = movingVornoi( uv );
+	
+	vec3 col = vec3( vornoi );
+	//col.rg = cellIndex * 0.1;
+	
+	COLOR = vec4( vec3(col), 1.0 );
+}

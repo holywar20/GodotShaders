@@ -37,4 +37,4 @@ position = Vector2( 924.782, -309.941 )
 position = Vector2( 1001.76, -117.97 )
 
 [node name="ShaderNoise" parent="Dancing/Node2D/Sprite" instance=ExtResource( 5 )]
-position = Vector2( 1692.74, -81.4256 )
+position = Vector2( 1692.74, -81.7998 )
